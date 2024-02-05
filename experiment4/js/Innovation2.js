@@ -1,30 +1,183 @@
+var vert = 
+`
+// (thank you to Adam Ferriss for the foundation of these example shaders)
+// position information that is used with gl_Position
+attribute vec3 aPosition;
+
+// texture coordinates
+attribute vec2 aTexCoord;
+
+// the varying variable will pass the texture coordinate to our fragment shader
+varying vec2 vTexCoord;
+
+void main() {
+  // assign attribute to varying, so it can be used in the fragment
+  vTexCoord = aTexCoord;
+
+  vec4 positionVec4 = vec4(aPosition, 1.0);
+  positionVec4.xy = positionVec4.xy * 2.0 - 1.0;
+  gl_Position = positionVec4;
+}
+`
+var frag = 
+`
+precision highp float;
+precision highp int;
+
+uniform float warp;
+uniform float mouseSize;
+uniform vec2 mousePos;
+uniform int numPoints;
+uniform float XArray[50];
+uniform float YArray[50];
+uniform float ColorArrayR[50];
+uniform float ColorArrayG[50];
+uniform float ColorArrayB[50];
+uniform sampler2D tex0;
+varying vec2 vTexCoord;
+
+void main() {
+  // now because of the varying vTexCoord, we can access the current texture coordinate
+  float mouseSplit = 0.0;
+  float splitVec[50];
+  float SumSplit = 0.0;
+  float count = 0.0;
+  float ColorSumR = 0.0;
+  float ColorSumG = 0.0;
+  float ColorSumB = 0.0;
+  vec2 uv = vTexCoord;
+  float x = uv.x-mousePos.x;
+  float y = uv.y-mousePos.y;
+  float dist = sqrt((x*x)+(y*y));
+  float IDist = mouseSize*1.0/(50.0 * dist * dist);
+  float LDist = mouseSize*1.0/(0.00001 * dist * dist * dist * dist);
+    mouseSplit = IDist;
+    SumSplit += IDist;
+  //float minDist = IDist;
+  //int minIndex = -1;
+    count += 1.0;
+    //if(IDist2 > 1.0){
+      //IDist2 = 1.0;
+    //}
+    //if(LDist2 > 30.0){
+    //  LDist2 = 30.0;
+    //}
+    ColorSumR += 1.0*LDist;
+    ColorSumG += 0.0*LDist;
+    ColorSumB += 0.0*LDist;
+  
+  //float x2 = uv.x-0.5;
+  //float y2 = uv.y-0.5;
+  //float dist2 = sqrt((x2*x2)+(y2*y2));
+  //float IDist2 = 1.0/(100.0 * dist2 * dist2);
+  //float LDist2 = 1.0 - (dist2*2.0);
+  
+  float sum = IDist;
+  //float sum = 0.0;
+  for(int i = 0; i < 50; i++){
+    if(i >= numPoints){
+      break;
+    }
+    float x2 = uv.x-XArray[i];
+    float y2 = uv.y-YArray[i];
+    float dist2 = sqrt((x2*x2)+(y2*y2));
+    float IDist2 = 1.0/(100.0 * dist2 * dist2);
+    float LDist2 = 1.0/(0.00001 * dist2 * dist2 * dist2 * dist2);
+    splitVec[i] = IDist2;
+    SumSplit += IDist2;
+    //if(IDist2 < minDist){
+    //  minDist = IDist2;
+    //  minIndex = i;
+    //}
+    count += 1.0;
+    //if(IDist2 > 1.0){
+      //IDist2 = 1.0;
+    //}
+    //if(LDist2 > 30.0){
+    //  LDist2 = 30.0;
+    //}
+    ColorSumR += ColorArrayR[i]*LDist2;
+    ColorSumG += ColorArrayG[i]*LDist2;
+    ColorSumB += ColorArrayB[i]*LDist2;
+    sum = sum + IDist2;
+  }
+  for(int i = 0; i < 50; i++){
+    if(i >= numPoints){
+      break;
+    }
+    splitVec[i] /= SumSplit;
+  }
+  mouseSplit /= SumSplit;
+  vec2 sumVec = vec2(0, 0);
+  float Total = 0.0;
+  for(int i = 0; i < 50; i++){
+    if(i >= numPoints){
+      break;
+    }
+    float x2 = uv.x-XArray[i];
+    float y2 = uv.y-YArray[i];
+    sumVec += vec2(x2*splitVec[i], y2*splitVec[i]);
+  }
+  float X = uv.x-mousePos.x;
+  float Y = uv.y-mousePos.y;
+  sumVec += vec2(X*mouseSplit, Y*mouseSplit);
+  float fval = 0.0;
+  //if(IDist + IDist2 > 0.7){
+  //  fval = 1.0;
+  //}
+  if(sum > 10.0){
+    fval = 1.0;
+  }
+  float maxcolor = 0.0;
+  if(ColorSumR > maxcolor){
+    maxcolor = ColorSumR;
+  }
+  if(ColorSumG > maxcolor){
+    maxcolor = ColorSumG;
+  }
+  if(ColorSumB > maxcolor){
+    maxcolor = ColorSumB;
+  }
+  //ColorSumR = ColorSumR/maxcolor;
+  //ColorSumG = ColorSumG/maxcolor;
+  //ColorSumB = ColorSumB/maxcolor;
+  ColorSumR = ColorSumR/count;
+  ColorSumG = ColorSumG/count;
+  ColorSumB = ColorSumB/count;
+  ColorSumR = ColorSumR/maxcolor;
+  ColorSumG = ColorSumG/maxcolor;
+  ColorSumB = ColorSumB/maxcolor;
+  vec4 finalColor = vec4(20.0*ColorSumR, 20.0*ColorSumG, 20.0*ColorSumB, 1.0);
+  // and now these coordinates are assigned to the color output of the shader
+  if(fval == 1.0){
+    vec2 fin = vec2(vTexCoord.x + sumVec.x*warp, vTexCoord.y + sumVec.y*warp);
+    vec4 final = texture2D(tex0, 1.0-fin)*0.8;
+    final = (final + finalColor)/2.0;
+    final.a = 1.0;
+    gl_FragColor = final;
+    //gl_FragColor = finalColor;
+  }
+  else{
+    gl_FragColor = texture2D(tex0, 1.0-vTexCoord);
+  }
+}
+`
+//scroll to change mouse ball size
+//up and down array keys to change amout of warping and its direction
+//make sure to click before pressing any keys
+//if its laggy, waiting a few seconds will usualy fix it (like 15)
 var ManualTargetEnergy = 5;
 var useTargetEnergy = false;
-var gravity = 0.3;
+var gravity = 0.1;
 var Speed = 1;
 var crop = 0;
 var Brick = false;
-
-
-var Globe = function(x, y){
-  var GoldenRatio = (1 + sqrt(5))/2;
-  var GoldenAngle = (2*PI)/GoldenRatio;
-  var a = 0;
-  var X = 0;
-  for(var i = 0.1; i < 50; i += 0.1){
-    a += GoldenAngle;
-    X = 2*sqrt(1000-pow((i-sqrt(1000)),2))-1.3;
-    push();
-    translate(x, y);
-    rotate(a);
-    translate(-x, -y);
-    ellipse(x + X, y, sqrt(300-(i*i))/4, 5);
-    //translate(-x, -y);
-    pop();
-  }
-  var r = 100;
-  return get(200 - r, 200 - r, 2*r, 2*r);
-};
+var warp = 0.5;
+var scrollDelta = 0;
+var ballCount = 40;
+function mouseWheel(event) { 
+    scrollDelta = event.delta;
+}
 //find intersection between two lines
 var lineS = function(x1,y1,x2,y2,x3,y3,x4,y4){
 var ua = ((x4 - x3)*(y1 - y3) - (y4 - y3)*(x1 - x3))/((y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1));
@@ -267,31 +420,28 @@ for(var i = 0; i < ball.length;i++){
             }
         }
     }
-    
-}
-  for(var i = 0; i < ball.length; i++){
     //draw balls
-    fill(ball[i].color);
-    noStroke();
-    push();
-    translate(ball[i].x,ball[i].y);
-    scale(25/(sqrt(1000*1.3)));
-    translate(-ball[i].x,-ball[i].y);
-    Globe(ball[i].x,ball[i].y);
-    //translate(ball[i].x,ball[i].y);
-    pop();
+    //fill(ball[i].color);
+    //noStroke();
     //ellipse(ball[i].x,ball[i].y,ball[i].s,ball[i].s);
-  }
+}
 };
-
+function preload() {
+  //TestShader = loadShader('shader.vert', 'shader.frag');
+}
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(800, 800, WEBGL);
+  TestShader = createShader(vert, frag);
+  //TestShader = loadShader('shader.vert', 'shader.frag');
+  cam = createCapture(VIDEO);
+  cam.size(710, 400);
+  cam.hide();
   block.push({x:-width/2,y:height - crop,w:width * 2,h:height * 2});
-block.push({x:-width/2,y:-height * 2 + crop,w:width * 2,h:height * 2});
+  block.push({x:-width/2,y:-height * 2 + crop,w:width * 2,h:height * 2});
 
-block.push({x:width - crop,y:-height/2,w:width * 2,h:height * 2});
-block.push({x:-width * 2 + crop,y:-height/2,w:width * 2,h:height * 2});
-  for(var i = 0; i < 20; i++){
+  block.push({x:width - crop,y:-height/2,w:width * 2,h:height * 2});
+  block.push({x:-width * 2 + crop,y:-height/2,w:width * 2,h:height * 2});
+  for(var i = 0; i < ballCount/*20*/; i++){
     var Color = color(0,0,0);
     var Rand = round(random(0,5));
     if(Rand === 0){
@@ -307,24 +457,20 @@ block.push({x:-width * 2 + crop,y:-height/2,w:width * 2,h:height * 2});
     } else if(Rand === 5){
       Color = color(random(230,255), random(230,255), random(0,60));
     }
-    ball.push({x:random(40,760),y:random(40,760),ax:random(-3,3),ay:random(-3,3),s:75, color:Color});
+    ball.push({x:random(40,760),y:random(40,760),ax:random(-3,3),ay:random(-3,3),s:50, color:Color});
   }
 }
 var totalKe = 0;
 var totalPe = 0;
 var targetEnergy = 0;
 var tested = false;
-var started = false;
+var XArray = [];
+var YArray = [];
+var ColorArrayR = [];
+var ColorArrayG = [];
+var ColorArrayB = [];
+var mouseSize = 1.0;
 function draw() {
-  if(!focused && started === false){
-    background(150, 150, 150);
-    fill(0, 0, 0);
-    noStroke();
-    textSize(30);
-    text("Click to start", 200, 200);
-    started = true;
-  }
-  if(focused){
    for(var t = 0; t < Speed; t++){
   if(tested === false){
     totalKe = 0;
@@ -340,7 +486,7 @@ function draw() {
       targetEnergy = ManualTargetEnergy*ball.length;
     }
   }
-  background(0, 0, 0, 100);
+  background(255, 255, 255, 100);
   //call ball function
     balls();
     //call block function
@@ -386,11 +532,54 @@ function draw() {
       ball[i].y = height - ball[i].s/2 - crop;
     }
   }
+    shader(TestShader);
+     //ball[0].x = mouseX;
+     //ball[0].y = mouseY;
+    TestShader.setUniform('mousePos', [float(mouseX/width), float(1 - (mouseY/height))]);
+    TestShader.setUniform('numPoints', ball.length);
+    for(var i = 0; i < ball.length; i++){
+      while(XArray.length - 1 < i){
+        XArray.push(0);
+        YArray.push(0);
+        ColorArrayR.push(0);
+        ColorArrayG.push(0);
+        ColorArrayB.push(0);
+      }
+      XArray[i] = float(ball[i].x/width);
+      YArray[i] = float(1-(ball[i].y/height));
+      ColorArrayR[i] = float(red(ball[i].color)/255);
+      ColorArrayG[i] = float(green(ball[i].color)/255);
+      ColorArrayB[i] = float(blue(ball[i].color)/255);
+    }
+    TestShader.setUniform('warp', float(warp));
+    TestShader.setUniform('mouseSize', float(mouseSize));
+    TestShader.setUniform('XArray', XArray);
+    TestShader.setUniform('YArray', YArray);
+    TestShader.setUniform('ColorArrayR', ColorArrayR);
+    TestShader.setUniform('ColorArrayG', ColorArrayG);
+    TestShader.setUniform('ColorArrayB', ColorArrayB);
+    TestShader.setUniform('tex0', cam);
+    rect(0,0,width, height);
+     if(keyIsPressed && keyCode === 65){
+       mouseSize *= 0.9;
+     }
+     if(keyIsPressed && keyCode === 68){
+       mouseSize *= 1.1;
+     }
+     if(keyIsPressed && keyCode === 87){
+       warp += 0.1;
+     }
+     if(keyIsPressed && keyCode === 83){
+       warp -= 0.1;
+     }
+     //if(warp < 0){
+     //  warp = 0;
+     //}
+     scrollDelta = 0;
   }
   //rect(0, height - 50/2 - crop, 800, 2);
   //Speed = round(mouseY/height)*10;
  //if(mouseY > height - 100){
  //   Speed = 100;
   //}
-}
 }

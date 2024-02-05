@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>Experiment 3: Generative Methods</title>
+	<title>Experiment 4: Images, Video, & Sound Art</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -30,46 +30,59 @@
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
 	<main id="content">
 		<section>
-			<h1>Experiment 3: Generative Methods</h1>
+			<h1>Experiment 4: Images, Video, & Sound Art</h1>
 			<div class="minor-section">
 				<h2>Imitate</h2>
-				<p>I decided to imitate a procedural image I found online:</p>
-				<img class="cat-photo" height="600px" src="img/Sphere.jpg">
+				<p>for Imitate, I decided to create something similar to the metaballs example from the animation and interactivity lecture:				</p>
+				<img class="cat-photo" height="600px" src="img/Blob.PNG">
 				<br>
-				<a href="https://www.pinterest.com/pin/363665738674949008/">https://www.pinterest.com/pin/363665738674949008/</a>
-				<p>I liked the image, and it seemed like I could make it in p5.js. The patterns reminded me of the ones created by the golden ratio in math, so I used it in my recreation:</p>
+				<p>I have done this before, but I used this as an excuse to learn how to use shaders in p5.js. I first implemented the shader for the metaballs:</p>
 				<iframe src="Imitation.html" height="820" width="815" title="Iframe Example"></iframe>
 				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/g3J2AyOBY">https://editor.p5js.org/coco558/sketches/g3J2AyOBY</a>
-				<p>I used the golden ratio to rotate ellipses around a point. I used the Pythagorean theorem to space and flatten the ellipses properly as they wrapped around the sphere.</p>
+				<a href="https://editor.p5js.org/coco558/sketches/PsIc9485r">https://editor.p5js.org/coco558/sketches/PsIc9485r</a>
+				<p>The shader does calculations on every pixel using the graphics card. The calculation is to loop through every metaball and find the sum of 1 / (DistFromMetaballToPixel)^4. It then colors every pixel with a high enough sum. I then added movement in the form of the physics in my Experiment 3:</p>
+				<iframe src="Imitation2.html" height="820" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/sketches/CYSjWZkk0">https://editor.p5js.org/coco558/sketches/CYSjWZkk0</a>
+				<iframe src="Imitation3.html" height="820" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/sketches/pwuwj4pKZ">https://editor.p5js.org/coco558/sketches/pwuwj4pKZ</a>
+				<iframe src="Imitation4.html" height="820" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/sketches/38KdhXpwa">https://editor.p5js.org/coco558/sketches/38KdhXpwa</a>
+			
+			
 			</div>
 
 			<div class="minor-section">
 				<h2>Integrate</h2>
-				<p>I decided to Mix the movement on the metaballs example on slide 13 of the animation and interactivity lecture.</p>
-				<img class="cat-photo" width="815" src="img/Blob.PNG">
-				<p>in my integration, the spheres from my imitation bounce around the canvas. I also used the rotation we talked about in class to make them slowly spin. Whenever a ball hits a wall, its speed on the perpendicular axis to the wall reverses. The spin is also re-randomized on collisions.</p>
+				<p>I decided to Integrate the metaballs with the webcam. the photos show the webcam being pointed at my monitor:</p>
+				<img class="cat-photo" height="600px" src="img/int1.png">
+				<img class="cat-photo" height="600px" src="img/int2.png">
+				<p>This just makes uncolored pixels the color of the webcam in the shader. the webcam had to be flipped for this to work.</p>
 				<iframe src="Integration.html" height="820" width="815" title="Iframe Example"></iframe>
 				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/-wT1VJMwj">https://editor.p5js.org/coco558/sketches/-wT1VJMwj</a>
+				<a href="https://editor.p5js.org/coco558/sketches/HeLqMEPGX">https://editor.p5js.org/coco558/sketches/HeLqMEPGX</a>
 			</div>
 
 			<div class="minor-section">
 				<h2>Innovate</h2>
-				<p>For my innovation, I thought that it would be interesting if the spheres collided with each other. To do this, I revamped some old physics calculation code I had made, and I improved it significantly by making the energy level of the physics system consistent even over long timespans. I tested this by speeding up the simulation by 100 times and leaving it for a while to check that the total energy didn’t change. The physics code itself is relatively simple. The general idea is that on a collision, the velocities of the balls are split into the part pointing toward the other one and the part perpendicular to that. then the two balls swap the first part (the one towards the other ball). Here is the initial version of the simulation:</p>
+				<p>For my innovation, I decided to make the metaballs warp the webcam. The vector from each pixel to each metaball is found, and then the pixel finds the weighted sum of these vectors based on the distances from the metaballs. I added this weighted sum to the location I sampled from the webcam at for each pixel. Use w and s keys to change mouse metaball size:</p>
 				<iframe src="Innovation1.html" height="820" width="815" title="Iframe Example"></iframe>
 				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/aggdyBgid">https://editor.p5js.org/coco558/sketches/aggdyBgid</a>
-				<p>and here's the final version with my imitation combined with it:</p>
+				<a href="https://editor.p5js.org/coco558/sketches/3LVL18vUg">https://editor.p5js.org/coco558/sketches/3LVL18vUg</a>
+				<p>this is what happens when I point my webcam at my monitor:</p>
+				<img class="cat-photo" height="600px" src="img/flame.PNG">
+				<p>I don't really know where the colors come from because my code isn't adding them. For my finishing touches, I finalized the warping code and I added the color blending again from the earlier versions. Use wsad for changing properties of the mouses metaball:</p>
 				<iframe src="Innovation2.html" height="820" width="815" title="Iframe Example"></iframe>
 				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/-4367yTpd5">https://editor.p5js.org/coco558/sketches/-4367yTpd5</a>
-				<p>In the final version, I really liked how you could see the trails between the holes in the spheres. I was also surprised by how much better the spheres looked when they had colors. Because energy is fully conserved, the balls will bounce around forever, so it could make a cool screen saver or wallpaper.</p>
+				<a href="https://editor.p5js.org/coco558/sketches/Gi4NgghtR">https://editor.p5js.org/coco558/sketches/Gi4NgghtR</a>
+				<p>I really like how you can see each individual metaball based on its color. I was also really happy with the color blending.</p>
 			</div>
 
 			<div class="minor-section"> 
 				<h2>Reflection</h2>
-				<p>I worked on this project alone. I had a really good time looking back and reusing my really old code from high school and making something interesting with it. Generally, the coding was relatively easy but time-consuming, and the main issue I had was getting it to run relatively quickly. I hope that I have enough time to work on similarly complex things for future experiments because, although I spent a lot of time on it, it was really fun.</p>
+				<p>I really enjoyed working on shaders for this project. I've really wanted to learn how to use them for a long time but this is my first time actually doing it. I have a lot of other ideas for shaders for future projects because their speed creates many opportunities for otherwise impossible projects. I like how the Expirament turned out, and it was really interesting to see what happened when I pointed the camera at my screen; It often looked like flames. One of the more difficult parts was figuring out how to put it on my webpage. I figured out that I needed everything in one file so I used separate code for the website version.</p>
 			</div>
 		</section>
 		<nav id="links">

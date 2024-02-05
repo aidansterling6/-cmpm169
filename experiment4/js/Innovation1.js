@@ -1,16 +1,172 @@
+var vert = 
+`
+// (thank you to Adam Ferriss for the foundation of these example shaders)
+// position information that is used with gl_Position
+attribute vec3 aPosition;
+
+// texture coordinates
+attribute vec2 aTexCoord;
+
+// the varying variable will pass the texture coordinate to our fragment shader
+varying vec2 vTexCoord;
+
+void main() {
+  // assign attribute to varying, so it can be used in the fragment
+  vTexCoord = aTexCoord;
+
+  vec4 positionVec4 = vec4(aPosition, 1.0);
+  positionVec4.xy = positionVec4.xy * 2.0 - 1.0;
+  gl_Position = positionVec4;
+}
+`
+var frag = 
+`
+precision highp float;
+precision highp int;
+
+float warp = 10.0;
+uniform float mouseSize;
+uniform vec2 mousePos;
+uniform int numPoints;
+uniform float XArray[50];
+uniform float YArray[50];
+uniform float ColorArrayR[50];
+uniform float ColorArrayG[50];
+uniform float ColorArrayB[50];
+uniform sampler2D tex0;
+varying vec2 vTexCoord;
+
+void main() {
+  // now because of the varying vTexCoord, we can access the current texture coordinate
+  float mouseSplit = 0.0;
+  float splitVec[50];
+  float SumSplit = 0.0;
+  float count = 0.0;
+  float ColorSumR = 0.0;
+  float ColorSumG = 0.0;
+  float ColorSumB = 0.0;
+  vec2 uv = vTexCoord;
+  float x = uv.x-mousePos.x;
+  float y = uv.y-mousePos.y;
+  float dist = sqrt((x*x)+(y*y));
+  float IDist = mouseSize*1.0/(50.0 * dist * dist);
+  float LDist = mouseSize*1.0/(0.00001 * dist * dist * dist * dist);
+  mouseSplit = IDist;
+  SumSplit += IDist;
+  //float minDist = IDist;
+  //int minIndex = -1;
+    //count += 1.0;
+    //if(IDist2 > 1.0){
+      //IDist2 = 1.0;
+    //}
+    //if(LDist2 > 30.0){
+    //  LDist2 = 30.0;
+    //}
+    //ColorSumR += 1.0*LDist;
+    //ColorSumG += 0.0*LDist;
+    //ColorSumB += 0.0*LDist;
+  
+  //float x2 = uv.x-0.5;
+  //float y2 = uv.y-0.5;
+  //float dist2 = sqrt((x2*x2)+(y2*y2));
+  //float IDist2 = 1.0/(100.0 * dist2 * dist2);
+  //float LDist2 = 1.0 - (dist2*2.0);
+  
+  float sum = IDist;
+  for(int i = 0; i < 50; i++){
+    if(i >= numPoints){
+      break;
+    }
+    float x2 = uv.x-XArray[i];
+    float y2 = uv.y-YArray[i];
+    float dist2 = sqrt((x2*x2)+(y2*y2));
+    float IDist2 = 1.0/(100.0 * dist2 * dist2);
+    float LDist2 = 1.0/(0.00001 * dist2 * dist2 * dist2 * dist2);
+    splitVec[i] = IDist2;
+    SumSplit += IDist2;
+    //if(IDist2 < minDist){
+    //  minDist = IDist2;
+    //  minIndex = i;
+    //}
+    count += 1.0;
+    //if(IDist2 > 1.0){
+      //IDist2 = 1.0;
+    //}
+    //if(LDist2 > 30.0){
+    //  LDist2 = 30.0;
+    //}
+    ColorSumR += ColorArrayR[i]*LDist2;
+    ColorSumG += ColorArrayG[i]*LDist2;
+    ColorSumB += ColorArrayB[i]*LDist2;
+    sum = sum + IDist2;
+  }
+  for(int i = 0; i < 50; i++){
+    if(i >= numPoints){
+      break;
+    }
+    splitVec[i] /= SumSplit;
+  }
+  mouseSplit /= SumSplit;
+  vec2 sumVec = vec2(0, 0);
+  float Total = 0.0;
+  for(int i = 0; i < 50; i++){
+    if(i >= numPoints){
+      break;
+    }
+    float x2 = uv.x-XArray[i];
+    float y2 = uv.y-YArray[i];
+    sumVec += (x2*splitVec[i], y2*splitVec[i]);
+  }
+  float X = uv.x-mousePos.x;
+  float Y = uv.y-mousePos.y;
+  sumVec += (x*mouseSplit, y*mouseSplit);
+  float fval = 0.0;
+  //if(IDist + IDist2 > 0.7){
+  //  fval = 1.0;
+  //}
+  if(sum > 10.0){
+    fval = 1.0;
+  }
+  float maxcolor = 0.0;
+  if(ColorSumR > maxcolor){
+    maxcolor = ColorSumR;
+  }
+  if(ColorSumG > maxcolor){
+    maxcolor = ColorSumG;
+  }
+  if(ColorSumB > maxcolor){
+    maxcolor = ColorSumB;
+  }
+  //ColorSumR = ColorSumR/maxcolor;
+  //ColorSumG = ColorSumG/maxcolor;
+  //ColorSumB = ColorSumB/maxcolor;
+  ColorSumR = ColorSumR/count;
+  ColorSumG = ColorSumG/count;
+  ColorSumB = ColorSumB/count;
+  ColorSumR = ColorSumR/maxcolor;
+  ColorSumG = ColorSumG/maxcolor;
+  ColorSumB = ColorSumB/maxcolor;
+  vec4 finalColor = vec4(20.0*ColorSumR, 20.0*ColorSumG, 20.0*ColorSumB, 1.0);
+  // and now these coordinates are assigned to the color output of the shader
+  if(fval == 1.0){
+    vec4 final = texture2D(tex0, (1.0-vTexCoord) + sumVec*warp)*0.8;
+    final.a = 1.0;
+    gl_FragColor = final;
+    //gl_FragColor = finalColor;
+  }
+  else{
+    gl_FragColor = texture2D(tex0, 1.0-vTexCoord);
+  }
+}
+`
 //scroll to change mouse ball size
-//up and down array keys to change amout of warping and its direction
-//make sure to click before pressing any keys
-//if its laggy, waiting a few seconds will usualy fix it (like 15)
 var ManualTargetEnergy = 5;
 var useTargetEnergy = false;
 var gravity = 0.1;
 var Speed = 1;
 var crop = 0;
 var Brick = false;
-var warp = 0.5;
 var scrollDelta = 0;
-var ballCount = 40;
 function mouseWheel(event) { 
     scrollDelta = event.delta;
 }
@@ -263,10 +419,11 @@ for(var i = 0; i < ball.length;i++){
 }
 };
 function preload() {
-  TestShader = loadShader('js/shader.vert', 'js/shader.frag');
+  //TestShader = loadShader('shader.vert', 'shader.frag');
 }
 function setup() {
   createCanvas(800, 800, WEBGL);
+  TestShader = createShader(vert, frag);
   //TestShader = loadShader('shader.vert', 'shader.frag');
   cam = createCapture(VIDEO);
   cam.size(710, 400);
@@ -276,7 +433,7 @@ function setup() {
 
   block.push({x:width - crop,y:-height/2,w:width * 2,h:height * 2});
   block.push({x:-width * 2 + crop,y:-height/2,w:width * 2,h:height * 2});
-  for(var i = 0; i < ballCount/*20*/; i++){
+  for(var i = 0; i < 40/*20*/; i++){
     var Color = color(0,0,0);
     var Rand = round(random(0,5));
     if(Rand === 0){
@@ -368,9 +525,7 @@ function draw() {
     }
   }
     shader(TestShader);
-     //ball[0].x = mouseX;
-     //ball[0].y = mouseY;
-    TestShader.setUniform('mousePos', [float(mouseX/width), float(1 - (mouseY/height))]);
+    TestShader.setUniform('mousePos', [float(mouseX/width), float(1-(mouseY/height))]);
     TestShader.setUniform('numPoints', ball.length);
     for(var i = 0; i < ball.length; i++){
       while(XArray.length - 1 < i){
@@ -386,7 +541,6 @@ function draw() {
       ColorArrayG[i] = float(green(ball[i].color)/255);
       ColorArrayB[i] = float(blue(ball[i].color)/255);
     }
-    TestShader.setUniform('warp', float(warp));
     TestShader.setUniform('mouseSize', float(mouseSize));
     TestShader.setUniform('XArray', XArray);
     TestShader.setUniform('YArray', YArray);
@@ -395,21 +549,14 @@ function draw() {
     TestShader.setUniform('ColorArrayB', ColorArrayB);
     TestShader.setUniform('tex0', cam);
     rect(0,0,width, height);
-     if(scrollDelta > 0){
-       mouseSize *= 0.9;
-     }
-     if(scrollDelta < 0){
-       mouseSize *= 1.1;
-     }
-     if(keyIsPressed && keyCode === UP_ARROW){
-       warp += 0.1;
-     }
-     if(keyIsPressed && keyCode === DOWN_ARROW){
-       warp -= 0.1;
-     }
-     //if(warp < 0){
-     //  warp = 0;
-     //}
+    if(keyIsPressed){
+       if(keyCode === 87){
+         mouseSize *= 0.9;
+       }
+       if(keyCode === 83){
+         mouseSize *= 1.1;
+      }
+    }
      scrollDelta = 0;
   }
   //rect(0, height - 50/2 - crop, 800, 2);
