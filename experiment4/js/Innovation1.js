@@ -263,7 +263,7 @@ for(var i = 0; i < ball.length;i++){
 }
 };
 function preload() {
-  TestShader = loadShader('shader.vert', 'shader.frag');
+  TestShader = loadShader('js/shader.vert', 'js/shader.frag');
 }
 function setup() {
   createCanvas(800, 800, WEBGL);
