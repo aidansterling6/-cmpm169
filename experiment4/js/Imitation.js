@@ -81,7 +81,17 @@ function setup() {
   TestShader = createShader(vert, frag);
 }
 
+var started = false;
 function draw() {
+  if(!focused && started === false){
+    background(150, 150, 150);
+    fill(0, 0, 0);
+    noStroke();
+    textSize(30);
+    text("Click to start", 200, 200);
+    started = true;
+  }
+  if(focused){
   background(220);
   shader(TestShader);
   TestShader.setUniform('mousePos', [float(mouseX/width), float(1-(mouseY/height))]);
@@ -89,4 +99,5 @@ function draw() {
   TestShader.setUniform('XArray', [0, 0.5, 0.6]);
   TestShader.setUniform('YArray', [0.4, 0.2, 0.8]);
   rect(0,0,width, height);
+  }
 }

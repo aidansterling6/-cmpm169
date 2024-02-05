@@ -364,7 +364,17 @@ var targetEnergy = 0;
 var tested = false;
 var XArray = [];
 var YArray = [];
+var started = false;
 function draw() {
+  if(!focused && started === false){
+    background(150, 150, 150);
+    fill(0, 0, 0);
+    noStroke();
+    textSize(30);
+    text("Click to start", 200, 200);
+    started = true;
+  }
+  if(focused){
    for(var t = 0; t < Speed; t++){
   if(tested === false){
     totalKe = 0;
@@ -446,4 +456,5 @@ function draw() {
  //if(mouseY > height - 100){
  //   Speed = 100;
   //}
+}
 }
