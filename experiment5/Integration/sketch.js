@@ -37,7 +37,17 @@ function setup() {
   gl.bufferData(gl.ARRAY_BUFFER, tArray, gl.STATIC_DRAW);
 }
 var s = true;
+var started = false;
 function draw() {
+  if(!focused && started === false){
+    background(150, 150, 150);
+    fill(0, 0, 0);
+    noStroke();
+    textSize(30);
+    text("Click to start", 200, 200);
+    started = true;
+  }
+  if(focused){
   if(s){
     for(var i = 0; i < file.length; i++){
       var line = split(file[i], ' ');
@@ -122,4 +132,5 @@ function draw() {
   TestShader.setUniform('P3z', P3z);
   
   rect(0,0,width, height);
+  }
 }

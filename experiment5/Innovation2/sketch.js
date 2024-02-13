@@ -225,7 +225,17 @@ function setup() {
   
 
 }
+var started = false;
 function draw() {
+  if(!focused && started === false){
+    background(150, 150, 150);
+    fill(0, 0, 0);
+    noStroke();
+    textSize(30);
+    text("Click to start", 200, 200);
+    started = true;
+  }
+  if(focused){
   background(220);
   shader(Shader);
   VertTex.bind();
@@ -277,4 +287,5 @@ function draw() {
     Scale *= 1.1;
   }
   scrollDelta = 0;
+}
 }
