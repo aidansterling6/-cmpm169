@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>Experiment 4: Images, Video, & Sound Art</title>
+	<title>Experiment 5: 3D Graphics</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -22,6 +22,9 @@
 	<!-- Use me for a JavaScript OOP Project -->
 	<script type="text/javascript" src="./js/project.js" DEFER></script>
 	<!-- Use me for a p5.js project -->
+
+	<script type="text/javascript" src="site.js" DEFER></script>
+
 	<script type="text/javascript" src="./js/sketch.js" DEFER></script>
 
 	<script type="text/javascript" src="./js/sketch2.js" DEFER></script>
@@ -30,60 +33,47 @@
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
 	<main id="content">
 		<section>
-			<h1>Experiment 4: Images, Video, & Sound Art</h1>
+			<h1>Experiment 5: 3D Graphics</h1>
 			<div class="minor-section">
 				<h2>Imitate</h2>
-				<p>for Imitate, I decided to create something similar to the metaballs example from the animation and interactivity lecture:				</p>
-				<img class="cat-photo" height="600px" src="img/Blob.PNG">
+				<p>for Imitate, I wanted to imitate something really simple in a really interesting way. I decided to replicate a simple spinning cube.</p>
+				<img class="cat-photo" height="600px" src="img/Cube.png">
+				<a href="https://editor.p5js.org/Francesca.Fabian/sketches/Syfq0rE0Q">https://editor.p5js.org/Francesca.Fabian/sketches/Syfq0rE0Q</a>
 				<br>
-				<p>I have done this before, but I used this as an excuse to learn how to use shaders in p5.js. I first implemented the shader for the metaballs. Click to start:</p>
-				<iframe src="Imitation.html" height="820" width="815" title="Iframe Example"></iframe>
+				<p>This is my replicated version:</p>
+				<iframe src="Imitation/index.html" height="820" width="815" title="Iframe Example"></iframe>
 				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/PsIc9485r">https://editor.p5js.org/coco558/sketches/PsIc9485r</a>
-				<p>The shader does calculations on every pixel using the graphics card. The calculation is to loop through every metaball and find the sum of 1 / (DistFromMetaballToPixel)^4. It then colors every pixel with a high enough sum. I then added movement in the form of the physics in my Experiment 3. Click to start:</p>
-				<iframe src="Imitation2.html" height="820" width="815" title="Iframe Example"></iframe>
-				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/CYSjWZkk0">https://editor.p5js.org/coco558/sketches/CYSjWZkk0</a>
-				<iframe src="Imitation3.html" height="820" width="815" title="Iframe Example"></iframe>
-				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/pwuwj4pKZ">https://editor.p5js.org/coco558/sketches/pwuwj4pKZ</a>
-				<iframe src="Imitation4.html" height="820" width="815" title="Iframe Example"></iframe>
-				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/38KdhXpwa">https://editor.p5js.org/coco558/sketches/38KdhXpwa</a>
+				<a href="https://editor.p5js.org/coco558/sketches/1PitESR-O">https://editor.p5js.org/coco558/sketches/1PitESR-O</a>
+				<p>This is interesting because I used ray tracing to render the cube. in this verion, I used uniforms to get the data for all of the triangles, and I used the math from here: <a href="https://courses.cs.washington.edu/courses/csep557/10au/lectures/triangle_intersection.pdf">https://courses.cs.washington.edu/courses/csep557/10au/lectures/triangle_intersection.pdf</a>
+					My raytracing algorithm sends a ray out from each pixel and draws the color of the closest triangle it hits. Each triangle gets a random color when it's first created. At this point, I was reading my mesh data from an obj file, but only really simple ones. it only read vertexes and triangles in their simplest form.</p>
 			
 			
 			</div>
 
 			<div class="minor-section">
 				<h2>Integrate</h2>
-				<p>I decided to Integrate the metaballs with the webcam. the photos show the webcam being pointed at my monitor:</p>
-				<img class="cat-photo" height="600px" src="img/int1.png">
-				<img class="cat-photo" height="600px" src="img/int2.png">
-				<p>This just makes uncolored pixels the color of the webcam in the shader. the webcam had to be flipped for this to work. Click to start:</p>
-				<iframe src="Integration.html" height="820" width="815" title="Iframe Example"></iframe>
+				<p>I decided to implement depth into my program. Because I was using raytracing, I already was getting location data for each pixel:</p>
+				<iframe src="Integration/index.html" height="820" width="815" title="Iframe Example"></iframe>
 				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/HeLqMEPGX">https://editor.p5js.org/coco558/sketches/HeLqMEPGX</a>
+				<a href="https://editor.p5js.org/coco558/sketches/eB_0Wf3z9">https://editor.p5js.org/coco558/sketches/eB_0Wf3z9</a>
+				<p>I just used the depth I was already using for occluding triangles to make further pixels darker. I am multiplying the inverse of the distance with the color.</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Innovate</h2>
-				<p>For my innovation, I decided to make the metaballs warp the webcam. The vector from each pixel to each metaball is found, and then the pixel finds the weighted sum of these vectors based on the distances from the metaballs. I added this weighted sum to the location I sampled from the webcam at for each pixel. Use w and s keys to change mouse metaball size. Click to start:</p>
-				<iframe src="Innovation1.html" height="820" width="815" title="Iframe Example"></iframe>
+				<p>For my innovation, I decided to experiment more with depth. I took the modulus of the depth to create bands and I inverted the colors in those bands:</p>
+				<iframe src="Innovation/index.html" height="820" width="815" title="Iframe Example"></iframe>
 				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/3LVL18vUg">https://editor.p5js.org/coco558/sketches/3LVL18vUg</a>
-				<p>this is what happens when I point my webcam at my monitor:</p>
-				<img class="cat-photo" height="600px" src="img/flame.PNG">
-				<p>I don't really know where the colors come from because my code isn't adding them. For my finishing touches, I finalized the warping code and I added the color blending again from the earlier versions. Use wsad for changing properties of the mouses metaball. Click to start:</p>
-				
+				<a href="https://editor.p5js.org/coco558/sketches/jU2qkm9Zb">https://editor.p5js.org/coco558/sketches/jU2qkm9Zb</a>
+				<p>I then wanted to allow more types and sizes of models to be added. Uniforms have a very small limit to how many can exist simultaneously, so I decided to store the vertex data in a texture. I used this library for it. for the final version. I also used the normal of the collision to get some interesting colors. Scroll and move the mouse to interact with it:</p>
 				<iframe src="Innovation2/index.html" height="820" width="815" title="Iframe Example"></iframe>
 				<br>
-				<a href="https://editor.p5js.org/coco558/sketches/Gi4NgghtR">https://editor.p5js.org/coco558/sketches/Gi4NgghtR</a>
-				<p>I really like how you can see each individual metaball based on its color. I was also really happy with the color blending.</p>
+				<a href="https://editor.p5js.org/coco558/sketches/QJD9MEofD">https://editor.p5js.org/coco558/sketches/QJD9MEofD</a>
 			</div>
 
 			<div class="minor-section"> 
 				<h2>Reflection</h2>
-				<p>I really enjoyed working on shaders for this project. I've really wanted to learn how to use them for a long time but this is my first time actually doing it. I have a lot of other ideas for shaders for future projects because their speed creates many opportunities for otherwise impossible projects. I like how the Expirament turned out, and it was really interesting to see what happened when I pointed the camera at my screen; It often looked like flames. One of the more difficult parts was figuring out how to put it on my webpage. I figured out that I needed everything in one file so I used separate code for the website version.</p>
+				<p>I have been wanting to work on something like this for a long time. I didn’t have time to implement all the features I wanted to, such as reflections and textures, but I might build on it for future experiments. The hardest part of this for me was reading vertices from a texture the way I wanted to. I could have just used the basic p5 way of doing it by using an image, but then I wouldn't have control over the way the texture stored my data. I specifically wanted floats because that's how obj files are stored, and it makes the vertex positions a lot more precise. I eventually found the library linked above, and that solved my problem. I think that If I had more time, I would also make it run more efficiently because, with large models, it doesn't run very fast.</p>
 			</div>
 		</section>
 		<nav id="links">
