@@ -1,10 +1,13 @@
-//scroll to zoom
+//scroll to zoom, mouse to rotate
+//the program loads 3d models from obj files. change the 
+//text-file name in the preload function to load a different file
+//be carefull about loading large files
 
 var file;
 var Shader;
 var vertexes = [];
 var triangles = [];
-var Scale = 0.5;
+var Scale = 2.6;
 
 var Cr = [];
 var Cg = [];
