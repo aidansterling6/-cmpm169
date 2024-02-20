@@ -1,17 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="utf-8" />
+<html>
+<head>
+	<!-- This title is used for tabs and bookmarks -->
+	<title>Experiment 6: Grammars & Text Art</title>
 
-  </head>
-  <body>
-    <main>
-    </main>
-    <script src="webgl2p5.js"></script>
-    <script src="tex.js"></script>
-    <script src="sketch.js"></script>
-  </body>
+	<!-- Use UTF character set, a good idea with any webpage -->
+	<meta charset="UTF-8" />
+	<!-- Set viewport so page remains consistently scaled w narrow devices -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- Include CSS file, including a site-wide CSS and for this particular page -->
+	<link rel="stylesheet" type="text/css" href="../css/site.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+	<!-- Load jQuery library -->
+	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+	<!-- Load p5.js library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.js"></script>
+
+	<!-- Link to javascript files - DEFER waits until all elements are rendered -->
+	<!-- Use me for a JavaScript OOP Project -->
+	<script type="text/javascript" src="./js/project.js" DEFER></script>
+	<!-- Use me for a p5.js project -->
+
+	<script type="text/javascript" src="site.js" DEFER></script>
+
+	<script type="text/javascript" src="./js/sketch.js" DEFER></script>
+
+	<script type="text/javascript" src="./js/sketch2.js" DEFER></script>
+</head>
+<body>
+	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
+	<main id="content">
+		<section>
+			<h1>Experiment 6: Grammars & Text Art</h1>
+			<div class="minor-section">
+				<h2>Imitate</h2>
+				<p>I decided to Imitate this text effect:</p>
+				<img class="cat-photo" height="600px" src="img/Img1.PNG">
+				<br>
+				<a href="http://www.generative-gestaltung.de/2/sketches/?01_P/P_3_2_5_02">http://www.generative-gestaltung.de/2/sketches/?01_P/P_3_2_5_02</a>
+				<br>
+				<p>Here is my version:</p>
+				<iframe src="Imitation/index.html" height="820" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/sketches/h8EXzCXhz">https://editor.p5js.org/coco558/sketches/h8EXzCXhz</a>
+				<p>I decided to just generally imitate it and not copy it exactly. One of the reasons I did this was because I wanted to use the text function rather than use my own font like the example does. I manually drew lines down the center of the characters using a tool I made. I also made a line function that had the moving dot effect on it. I then could simply combine these to get the final effect.</p>
+			
+			
+			</div>
+
+			<div class="minor-section">
+				<h2>Integrate</h2>
+				<p>I decided to integrate this into a grid like this example:</p>
+				<img class="cat-photo" height="600px" src="img/Img2.PNG">
+				<br>
+				<a href="http://www.generative-gestaltung.de/2/sketches/?01_P/P_2_1_4_01">http://www.generative-gestaltung.de/2/sketches/?01_P/P_2_1_4_01</a>
+				<p>Here is my version:</p>
+				<iframe src="Integration/index.html" height="820" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/sketches/5eCzvuLF6">https://editor.p5js.org/coco558/sketches/5eCzvuLF6</a>
+				<p>For the integration I added the ability to make multiple characters have the effect. I could make the effect happen with pretty much any text I wanted as long as I set it up first. </p>
+			</div>
+
+			<div class="minor-section">
+				<h2>Innovate</h2>
+				<p>For innovation, I made the letters link up at their ends to create a network of lines:</p>
+				<iframe src="Innovation/index.html" height="820" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/sketches/urgBDym8m">https://editor.p5js.org/coco558/sketches/urgBDym8m</a>
+				<p>I used the already made lines from the letters to find connection points between letters. I choose a rondom point to connect a new letter to and then add it. I add a bunch of letters each frame and I slowly fade old letters using the background.</p>
+			</div>
+
+			<div class="minor-section"> 
+				<h2>Reflection</h2>
+				<p>I did not get as far as I wanted to in this experiment because I was overloaded with work from other classes. I wanded to make new letters only spawn when they dont collide with already created letters. I wrote code to do this but I didnt have time to ignore collistions with the point a new letter is spawned from. I could probably do this if I had more time. I hope that I can revisit this project later when I have more time.</p>
+			</div>
+		</section>
+		<nav id="links">
+			<!-- Put links to other pages (including the homepage) here. -->
+			<a href="https://aidansterling6.github.io/-cmpm169/">Homepage</a>
+		</nav>
+	</main>
+</body>
 </html>
