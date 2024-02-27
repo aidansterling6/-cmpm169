@@ -2,7 +2,7 @@
 <html>
 <head>
 	<!-- This title is used for tabs and bookmarks -->
-	<title>Experiment X - Subject/Topic</title>
+	<title>Experiment 7: Data Visualization & Networks</title>
 
 	<!-- Use UTF character set, a good idea with any webpage -->
 	<meta charset="UTF-8" />
@@ -22,50 +22,64 @@
 	<!-- Use me for a JavaScript OOP Project -->
 	<script type="text/javascript" src="./js/project.js" DEFER></script>
 	<!-- Use me for a p5.js project -->
+
+	<script type="text/javascript" src="site.js" DEFER></script>
+
 	<script type="text/javascript" src="./js/sketch.js" DEFER></script>
+
+	<script type="text/javascript" src="./js/sketch2.js" DEFER></script>
 </head>
 <body>
 	<!-- Style this page by changing the CSS in ../css/site.css or css/experiment.css -->
 	<main id="content">
 		<section>
-			<h1>Experiment X - Subject/Topic</h1>
+			<h1>Experiment 7: Data Visualization & Networks</h1>
 			<div class="minor-section">
 				<h2>Imitate</h2>
-				<p>To develop artistic creativity in coding, it can be helpful to start by studying and learning from existing examples. This might involve reviewing code written by others, analyzing successful techniques, or even copying and modifying code to better understand how it works. By imitating and learning from existing techniques and strategies, we can gain a better understanding of what has been done before and what is possible, and identify opportunities for improvement and innovation.</p>
-				<p>What code did you start with? (You don't need to provide the code itself, but where did you start?) Document this step briefly.</p>
+				<p>For Imitate, I decided to build off of r/place:</p>
+				<img class="cat-photo" height="600px" src="img/r_place.png">
+				<br>
+				<a href="https://www.reddit.com/r/place/">https://www.reddit.com/r/place/</a>
+				<br>
+				<p>r/place was really interesting to me because even though so many people were working together to make it, the final image had a lot of order. Here is my version:</p>
+				<iframe src="Imitation/index.html" height="835" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/full/_sNk_Zg2f">https://editor.p5js.org/coco558/full/_sNk_Zg2f</a>
+				<p>I am using FireBase for a server. Each time you click, it updates a JSON on FireBase. The JSON uses string versions of the coordinates to keep track of which squares are which colors.</p>
+			
+			
 			</div>
 
 			<div class="minor-section">
 				<h2>Integrate</h2>
-				<p>After learning from existing techniques and strategies, we can build upon that foundation by combining elements from different sources. This might involve combining elements from different programming languages, using libraries or frameworks in new ways, or bringing together techniques from different fields or disciplines. By integrating and combining elements from different sources, we can create something new and unique.</p>
-				<p>How did you extend the code or combine with another technique to make something new? Document this step.</p>
+				<p>I decided to integrate with a program I made a while ago. It's a hex version of Minesweeper:</p>
+				<img class="cat-photo" height="600px" src="img/exp7_2.PNG">
+				<br>
+				<a href="https://www.khanacademy.org/computer-programming/hex-minesweeper/5684705568505856">https://www.khanacademy.org/computer-programming/hex-minesweeper/5684705568505856</a>
+				<p>Here is the hex integration with r/place I made:</p>
+				<iframe src="Integration/index.html" height="835" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/full/FrHqgSd7R">https://editor.p5js.org/coco558/full/FrHqgSd7R</a>
+				<p>I redesigned the hex shapes to make the code cleaner. This version uses the same storage system as the previous one. Every other layer is shifted over so that the Hexagons interlock.</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Innovate</h2>
-				<p>Finally, we can introduce new or original ideas to our coding process by thinking creatively and pushing the boundaries. This might involve developing entirely new techniques or approaches, or using existing techniques in new and creative ways. By innovating and introducing new ideas, we can create art that is truly groundbreaking.</p>
-				<p>How did you use the code as a jumping off point to create something truly unique and novel? Document this step thoroughly.</p>
+				<p>For my Innovation, I decided to split the hexagons into equilateral triangles and allow people to edit those. I let you dray with hexagons, trapezoids, rhombuses, and triangles:</p>
+				<iframe src="Innovation/index.html" height="835" width="815" title="Iframe Example"></iframe>
+				<br>
+				<a href="https://editor.p5js.org/coco558/sketches/wM3ZkohmF">https://editor.p5js.org/coco558/sketches/wM3ZkohmF</a>
+				<p>The triangles are still stored in a grid. I make horizontal rows by flipping every other triangle, and then I shift rows horizontally to line them up. I hardcoded in all the shapes and their rotations. I made each one of these versions have a separate part of the server so all can work at the same time.</p>
 			</div>
 
-			<div class="minor-section">
+			<div class="minor-section"> 
 				<h2>Reflection</h2>
-				<p>Each person that worked on the code should reflect on the process, the difficulties, and the successes of the experiment. Here's where you can put your reflections.</p>
-				<ul>
-					<li>What part of the project you contributed</li>
-					<li>A reflection on your work and the work of the team</li>
-					<li>Brief highs and lows</li>
-				</ul>
-			</div>
-
-			<div class="minor-section">
-				<h2>Results</h2>
-				<div id="canvas-container">
-					<!-- canvas will be added here -->
-				</div>
+				<p>I really liked this project. I thought that r/place was really cool and I always wanted to do something similar. I'm interested to see how many people in the class will interact with it and what they will create. This also opened up a bunch of other possibilities because I learned how to use FireBase.</p>
 			</div>
 		</section>
 		<nav id="links">
 			<!-- Put links to other pages (including the homepage) here. -->
+			<a href="https://aidansterling6.github.io/-cmpm169/">Homepage</a>
 		</nav>
 	</main>
 </body>
